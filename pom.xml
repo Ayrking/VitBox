@@ -4,7 +4,7 @@
 
     <artifactId>vit-box</artifactId>
     <groupId>io.github.ayrking</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 	
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
@@ -23,6 +23,12 @@
 
     <!-- Dependencies -->
     <dependencies>
+
+        <dependency>
+            <groupId>io.github.prog-z</groupId>
+            <artifactId>plumlib</artifactId>
+            <version>1.1.0</version>
+        </dependency>
     
 		<dependency>
 			<groupId>org.spigotmc</groupId>
@@ -45,7 +51,7 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <configuration>
                     <tasks>
-                        <!--<copy file="target/vit-box-1.0-SNAPSHOT.jar" todir="./plugins"/>-->
+                        <!--<copy file="target/vit-box-1.0.0.jar" todir="./plugins"/>-->
                     </tasks>
                 </configuration>
                 <executions>
