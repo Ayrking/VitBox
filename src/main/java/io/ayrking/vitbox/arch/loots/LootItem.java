@@ -10,8 +10,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class LootItem {
 
-    final String itemID;
-    final double proba;
+    private final String itemID;
+    private double proba;
     
     public LootItem(final @NotNull String itemID, double proba) {
         this.itemID = itemID;
@@ -22,4 +22,5 @@ public class LootItem {
     @NotNull
     public final String getItemID() {return this.itemID;}
     public final double getProbability() {return this.proba;}
+    public final void setProbability(double newProba) {this.proba = newProba;}
 }

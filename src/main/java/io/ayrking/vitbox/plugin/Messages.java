@@ -1,6 +1,8 @@
 package io.ayrking.vitbox.plugin;
 
 import org.jetbrains.annotations.NotNull;
+
+import net.md_5.bungee.api.ChatColor;
 /**
  * Contain all the messages sent by the plugin
  * @author Meltwin
@@ -26,5 +28,15 @@ public final class Messages {
     }
     public static final String lootBoxLoaded(int loaded, int max) {
         return "Lootbox files loaded : "+Integer.toString(loaded)+" valid / "+Integer.toString(max)+" files in directory.";
+    }
+
+    // Command Handler
+    public static final String TABLE_CMD_FAIL = ChatColor.RED+"Erreur de synthaxe ! Vouliez vous écrire /vitbox table [new/list] ?";
+
+    // Table Messages
+    public static final String LIST_HEADER = ChatColor.DARK_RED+"================================["+ChatColor.YELLOW+"Loot Tables"+ChatColor.DARK_RED+"]================================";
+    public static final String LIST_FOOTER = ChatColor.DARK_RED+"============================================================================";
+    public static final String listItem(@NotNull String name) {
+        return ChatColor.YELLOW+"   - "+name;
     }
 }

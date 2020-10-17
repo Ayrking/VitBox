@@ -28,5 +28,21 @@ public class LootTable {
         items.add(new LootItem(itemID, proba));
     }
 
+    /**
+     * Put all the probability between 0 & 1
+     * Make the sum of the probability to 1
+     */
+    public final void reUnitProbabilities() {
+        double sum = 0;
+        for (LootItem item : items)
+            sum += item.getProbability();
+
+        if (sum == 0)
+            return;
+
+        for (LootItem item : items)
+            item.setProbability(item.getProbability()/sum);
+    }
+
     
 }

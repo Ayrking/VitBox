@@ -9,6 +9,7 @@ import fr.plum.plumlib.chat.config.ChatConfig;
 import io.ayrking.vitbox.arch.box.BoxTable;
 import io.ayrking.vitbox.arch.loots.LootTable;
 import io.ayrking.vitbox.files.FilesManager;
+import io.ayrking.vitbox.plugin.CommandHandler;
 import io.ayrking.vitbox.plugin.VitBoxConfig;
 /**
  * Plugin for creating lootbox (compatible with modded item)
@@ -34,6 +35,7 @@ public class Main extends PlumPlugin {
         // Initialisation of the plugin
         sendInitMsg();
         FILES.init(); // Load local files
+        this.setCommandHandler(new CommandHandler());
     }
 
 

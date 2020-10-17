@@ -43,6 +43,7 @@ public final class LootTableParser extends FileParser implements IMessageSender 
         for (String child : cs.getKeys(false)) // Add Items
             this.table.addItem(child, this.getConfig().getDouble("loots." + child));
 
+        this.table.reUnitProbabilities();
         sendMessage(Bukkit.getConsoleSender(), Messages.lootTableLoaded(this.fileName));
         this.valid = true;
     }
