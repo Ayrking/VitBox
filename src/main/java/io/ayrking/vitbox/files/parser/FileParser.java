@@ -12,9 +12,11 @@ import fr.plum.plumlib.io.yaml.ConfigFile;
 public class FileParser extends ConfigFile {
 
     protected boolean valid = false;
+    protected final String fileName;
 
     public FileParser(final @NotNull Class<?> c, final @NotNull String configDir, final @NotNull String outFile, final String defaultFile) {
         super(c, configDir, outFile, defaultFile);
+        this.fileName = outFile;
     }
     /**
      * Return whether the file was parsed correctly or not

@@ -27,7 +27,7 @@
         <dependency>
             <groupId>io.github.prog-z</groupId>
             <artifactId>plumlib</artifactId>
-            <version>1.1.0</version>
+            <version>1.1.1</version>
         </dependency>
     
 		<dependency>

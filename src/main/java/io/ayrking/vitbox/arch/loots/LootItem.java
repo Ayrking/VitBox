@@ -1,4 +1,4 @@
-package io.ayrking.vitbox.arch;
+package io.ayrking.vitbox.arch.loots;
 
 import org.jetbrains.annotations.NotNull;
 
