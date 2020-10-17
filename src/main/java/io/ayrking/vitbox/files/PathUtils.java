@@ -8,6 +8,7 @@ package io.ayrking.vitbox.files;
 public interface PathUtils {
     static String constructRecursDirPath(String... dirs) {
         StringBuilder bld = new StringBuilder();
+        bld.append(".");
         for (String directory : dirs)
             bld.append('/'+directory);
         return bld.toString();

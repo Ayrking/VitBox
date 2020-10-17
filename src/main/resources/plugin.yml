@@ -1,4 +1,5 @@
 name: VitBox
-version: 1.0-SNAPSHOT
+version: 1.0.0
 author: Meltwin
-main: io.ayrking.Main
+main: io.ayrking.vitbox.Main
+depend: [plumlib]
