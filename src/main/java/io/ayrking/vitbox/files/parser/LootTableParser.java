@@ -40,10 +40,15 @@ public final class LootTableParser extends FileParser implements IMessageSender 
         // If loot path exist => extract the loots
         this.table = new LootTable(this.fileName);
 
-        for (String child : cs.getKeys(false)) // Add Items
-            this.table.addItem(child, this.getConfig().getDouble("loots." + child));
+        for (String child : cs.getKeys(false)) { // Add Items
+            short qty = (short) this.getConfig().getInt("loots."+child+".amount", 1);
+            double proba = this.getConfig().getDouble("loots."+ child+".proba");
+            this.table.addItem(child, qty, proba);
+        }
+            
 
         this.table.reUnitProbabilities();
+        this.table.transformProbaToSum();
         sendMessage(Bukkit.getConsoleSender(), Messages.lootTableLoaded(this.fileName));
         this.valid = true;
     }

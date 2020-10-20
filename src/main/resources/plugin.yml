@@ -10,6 +10,10 @@ commands:
     description: Commande pour gérer les lootbox sur le serveur.
     usage: Erreur de synthaxe ! Vouliez vous écrire /vitbox [table/box] ?
     permission: vitbox.admin
+  testitem:
+    description: Donne les infos spigots sur l'item en main
+    usage: /testitem
+    permission: vitbox.testitem
 
 permissions:
   vitbox.*:
@@ -18,9 +22,13 @@ permissions:
     children:
       vitbox.tables: true
       vitbox.box: true
+      vitbox.testitem: true
   vitbox.table:
     description: Autorise le joueur à manipuler les tables de loot.
     default: op
   vitbox.box:
     description: Autorise le joueur à manipuler les lootbox.
+    default: op
+  vitbox.testitem:
+    description: Autorise le joueur à connaitre les informations des items
     default: op

@@ -30,8 +30,5 @@ public final class VitBoxConfig extends PluginConfig {
     protected VitBoxConfig() {super(PLUGIN_NAME, PLUGIN_COLOR, BRACK_COLOR);}
     private static final VitBoxConfig instance = new VitBoxConfig();
     public static final VitBoxConfig getInstance() {return instance;}
-
-    // Permissions
-    public static final String TABLE_PERM = "vitbox.tables";
     
 }

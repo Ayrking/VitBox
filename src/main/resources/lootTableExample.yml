@@ -1,4 +1,10 @@
 loots:
-  stone: 0.5
-  dirt: 0.3
-  diamond_sword: 0.1
+  STONE:
+    amount: 64
+    proba: 0.5
+  DIRT: 
+    proba: 0.3
+    amount: 25
+  DIAMOND_SWORD: 
+    proba: 0.1
+    amout: 1
