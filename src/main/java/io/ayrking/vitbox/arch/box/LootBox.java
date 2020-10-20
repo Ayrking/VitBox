@@ -1,7 +1,9 @@
-package io.ayrking.vitbox.arch.loots;
+package io.ayrking.vitbox.arch.box;
 
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+
+import io.ayrking.vitbox.arch.LootTable;
 /**
  * Data of the lootbox 
  * @author Meltwin

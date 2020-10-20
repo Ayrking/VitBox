@@ -1,10 +1,14 @@
 loots:
-  STONE:
-    amount: 64
-    proba: 0.5
-  DIRT: 
-    proba: 0.3
-    amount: 25
-  DIAMOND_SWORD: 
-    proba: 0.1
-    amout: 1
+  items:
+    STONE:
+      amount: 64
+      proba: 0.5
+    DIRT: 
+      proba: 0.3
+      amount: 25
+    DIAMOND_SWORD: 
+      proba: 0.1
+      amout: 1
+price:
+  items:
+    REDSTONE_BLOCK: 65

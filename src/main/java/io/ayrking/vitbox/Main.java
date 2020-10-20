@@ -8,12 +8,12 @@ import org.jetbrains.annotations.Nullable;
 
 import fr.plum.plumlib.arch.PlumPlugin;
 import fr.plum.plumlib.chat.config.ChatConfig;
+import io.ayrking.vitbox.arch.LootTable;
 import io.ayrking.vitbox.arch.box.BoxTable;
-import io.ayrking.vitbox.arch.loots.LootTable;
+import io.ayrking.vitbox.calc.CommandHandler;
+import io.ayrking.vitbox.calc.VitBoxListener;
 import io.ayrking.vitbox.files.FilesManager;
-import io.ayrking.vitbox.plugin.CommandHandler;
 import io.ayrking.vitbox.plugin.VitBoxConfig;
-import io.ayrking.vitbox.plugin.VitBoxListener;
 /**
  * Plugin for creating lootbox (compatible with modded item)
  * @author Meltwin
@@ -28,7 +28,7 @@ public class Main extends PlumPlugin {
     @Nullable
     public static final LootTable getLootTable(final @NotNull String name) {
         for (LootTable t : LOOT_TABLES)
-            if (t.getLootTableName().equals(name)) return t;
+            if (t.getName().equals(name)) return t;
         return null;
     }
 
@@ -40,7 +40,7 @@ public class Main extends PlumPlugin {
         sendInitMsg();
         FILES.init(); // Load local files
         this.setCommandHandler(new CommandHandler());
-        Bukkit.getPluginManager().registerEvents(new VitBoxListener(), this);
+        Bukkit.getPluginManager().registerEvents(VitBoxListener.getInstance(), this);
     }
 
 

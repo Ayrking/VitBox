@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import fr.plum.plumlib.chat.config.ChatConfig;
 import fr.plum.plumlib.chat.sender.IMessageSender;
 import io.ayrking.vitbox.Main;
-import io.ayrking.vitbox.arch.loots.LootBox;
-import io.ayrking.vitbox.arch.loots.LootTable;
+import io.ayrking.vitbox.arch.LootTable;
+import io.ayrking.vitbox.arch.box.LootBox;
 import io.ayrking.vitbox.plugin.Messages;
 import io.ayrking.vitbox.plugin.VitBoxConfig;
 

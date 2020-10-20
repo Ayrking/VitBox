@@ -4,8 +4,6 @@ import java.util.HashMap;
 
 import org.jetbrains.annotations.NotNull;
 
-import io.ayrking.vitbox.arch.loots.LootBox;
-
 /**
  * Manager of the lootbox
  * @author Meltwin

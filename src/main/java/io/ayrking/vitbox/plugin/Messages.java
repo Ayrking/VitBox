@@ -37,8 +37,8 @@ public final class Messages {
         return "Vous ouvrez la table "+table+".";
     }
 
-    public static final String itemInfo(final @NotNull String item, final double start, final double end) {
-        return listItem(item)+" : "+ChatColor.DARK_RED+Double.toString(start)+" -> "+Double.toString(end);
+    public static final String itemInfo(final @NotNull String item, final double probaSum) {
+        return listElement(item)+" : "+ChatColor.DARK_RED+Double.toString(probaSum);
     }
 
     // Player Message
@@ -77,7 +77,7 @@ public final class Messages {
             bd.append('=');
         return bd.toString();
     }
-    public static final String listItem(@NotNull String name) {
-        return ChatColor.YELLOW+"   - "+name;
+    public static final String listElement(@NotNull String element) {
+        return ChatColor.YELLOW+"   - "+element;
     }
 }

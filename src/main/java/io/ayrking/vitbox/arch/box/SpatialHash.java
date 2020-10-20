@@ -7,7 +7,6 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 import fr.plum.plumlib.container.Pair;
-import io.ayrking.vitbox.arch.loots.LootBox;
 
 /**
  * HashTable based on the position of the box.
