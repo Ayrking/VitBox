@@ -12,7 +12,8 @@ import fr.plum.plumlib.io.yaml.ConfigFile;
 import io.ayrking.vitbox.Main;
 import io.ayrking.vitbox.files.parser.BoxParser;
 import io.ayrking.vitbox.files.parser.LootTableParser;
-import io.ayrking.vitbox.plugin.Messages;
+import io.ayrking.vitbox.messages.BoxesMessages;
+import io.ayrking.vitbox.messages.TableMessages;
 import io.ayrking.vitbox.plugin.VitBoxConfig;
 
 /**
@@ -38,7 +39,7 @@ public final class FilesManager implements IMessageSender {
      */
     private final void loadLootTables() {
 
-        sendMessage(Bukkit.getConsoleSender(), Messages.LOAD_LOOT_TABLE);
+        sendMessage(Bukkit.getConsoleSender(), TableMessages.LOAD_LOOT_TABLE);
 
         // Calc Path & retrieve yaml files' name list
         File lootTableDir = new File(VitBoxConfig.LOOT_TABLE_FOLDER);
@@ -60,7 +61,7 @@ public final class FilesManager implements IMessageSender {
     }
 
     private final void loadLootBoxes() {
-        sendMessage(Bukkit.getConsoleSender(), Messages.LOAD_LOOT_BOXES);
+        sendMessage(Bukkit.getConsoleSender(), BoxesMessages.LOAD_LOOT_BOXES);
 
         // Check Folder 
         File dir = new File(VitBoxConfig.CHEST_DATA_FOLDER);
@@ -78,7 +79,7 @@ public final class FilesManager implements IMessageSender {
             }
                 
         }
-        sendMessage(Bukkit.getConsoleSender(), Messages.lootBoxLoaded(counter, files.length));
+        sendMessage(Bukkit.getConsoleSender(), BoxesMessages.lootBoxLoaded(counter, files.length));
     }
 
     @Override

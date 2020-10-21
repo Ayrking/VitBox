@@ -16,8 +16,10 @@ import io.ayrking.vitbox.Main;
 import io.ayrking.vitbox.arch.LootTable;
 import io.ayrking.vitbox.arch.box.LootBox;
 import io.ayrking.vitbox.arch.price.PriceElement;
-import io.ayrking.vitbox.plugin.Messages;
+import io.ayrking.vitbox.messages.BoxesMessages;
 import io.ayrking.vitbox.plugin.VitBoxConfig;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
 /**
  * Listener for box opening
@@ -52,9 +54,13 @@ public class VitBoxListener implements Listener, IMessageSender {
 
         event.setCancelled(true);
         // Check if player can afford the box
-        if (!box.getLootTable().playerCanOpen(event.getPlayer()))
-            // TODO : Message "can't afford"
+        if (!box.getLootTable().playerCanOpen(event.getPlayer())) {
+            // Actionbar
+            event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent(BoxesMessages.CANT_AFFORD));
+            // Chat
+            sendMessage(event.getPlayer(), BoxesMessages.CANT_AFFORD);
             return;
+        }
 
         //Everything is allright, proceding to the opening
         playerInteracted(event.getPlayer(),box.getLootTable(),false);
@@ -83,8 +89,11 @@ public class VitBoxListener implements Listener, IMessageSender {
                 price.applyToPlayer(player);
         }
         table.pickOne().applyToPlayer(player);
-        // TODO : place message in action bar ?
-        sendMessage(player, Messages.boxOpen(table.getName()));
+        
+        // Actionbar
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR,new TextComponent(BoxesMessages.boxOpen(table.getName())));
+        // Chat
+        sendMessage(player, BoxesMessages.boxOpen(table.getName()));
     }
 
     // =========================================================================

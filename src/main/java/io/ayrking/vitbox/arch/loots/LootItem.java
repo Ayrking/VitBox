@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import io.ayrking.vitbox.plugin.Messages;
+import io.ayrking.vitbox.messages.TableMessages;
 
 /**
  * Simple class for storing a lootable item
@@ -59,6 +59,6 @@ public class LootItem extends LootElement {
 
     @Override
     public String lootInfo() {
-        return Messages.itemInfo(this.itemID, this.proba);
+        return TableMessages.itemInfo(this.itemID, this.proba);
     }
 }

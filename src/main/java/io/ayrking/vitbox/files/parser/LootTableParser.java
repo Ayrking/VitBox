@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import fr.plum.plumlib.chat.config.ChatConfig;
 import fr.plum.plumlib.chat.sender.IMessageSender;
 import io.ayrking.vitbox.arch.LootTable;
-import io.ayrking.vitbox.plugin.Messages;
+import io.ayrking.vitbox.messages.TableMessages;
 import io.ayrking.vitbox.plugin.VitBoxConfig;
 
 /**
@@ -39,7 +39,7 @@ public final class LootTableParser extends FileParser implements IMessageSender 
         // Collecting Loots
         cs = this.getConfig().getConfigurationSection("loots");
         if (cs == null) {
-            sendMessage(Bukkit.getConsoleSender(), Messages.lootTableParseFail(this.fileName));
+            sendMessage(Bukkit.getConsoleSender(), TableMessages.lootTableParseFail(this.fileName));
             return;
         }
 
@@ -59,7 +59,7 @@ public final class LootTableParser extends FileParser implements IMessageSender 
         this.table.transformProbaToSum();
 
         // END
-        sendMessage(Bukkit.getConsoleSender(), Messages.lootTableLoaded(this.fileName));
+        sendMessage(Bukkit.getConsoleSender(), TableMessages.lootTableLoaded(this.fileName));
         this.valid = true;
     }
     /**

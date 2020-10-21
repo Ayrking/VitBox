@@ -1,11 +1,9 @@
 package io.ayrking.vitbox.calc;
 
 import java.io.IOException;
-import java.nio.file.Path;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -22,8 +20,9 @@ import io.ayrking.vitbox.arch.loots.LootElement;
 import io.ayrking.vitbox.files.PathUtils;
 import io.ayrking.vitbox.messages.BoxesMessages;
 import io.ayrking.vitbox.messages.GeneralMessages;
+import io.ayrking.vitbox.messages.ItemsMessages;
 import io.ayrking.vitbox.messages.TableMessages;
-import io.ayrking.vitbox.plugin.Messages;
+import io.ayrking.vitbox.messages.Messages;
 import io.ayrking.vitbox.plugin.Permissions;
 import io.ayrking.vitbox.plugin.VitBoxConfig;
 import net.md_5.bungee.api.ChatColor;
@@ -69,8 +68,8 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
                     break;
             }
         }
-        // TODO : error message
-        return ERROR;
+        sender.sendMessage(GeneralMessages.VITBOX_CMD_ERROR);
+        return !ERROR;
     }
 
     private final boolean vitboxTable(final @NotNull CommandSender sender, final @NotNull String[] args) {
@@ -88,8 +87,8 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
                     break;
             }
         }
-        sender.sendMessage(Messages.TABLE_CMD_FAIL);
-        return ERROR;
+        sender.sendMessage(TableMessages.TABLE_CMD_FAIL);
+        return !ERROR;
     }
 
     private final boolean vitboxBoxes(final @NotNull CommandSender sender, final @NotNull String[] args) {
@@ -105,8 +104,8 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
                     break;
             }
         }
-        // TODO : error message
-        return ERROR;
+        sender.sendMessage(BoxesMessages.BOX_CMD_FAIL);
+        return !ERROR;
     }
 
     // =========================================================================
@@ -114,15 +113,25 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
     // =========================================================================
 
     private final boolean newLootTable(final @NotNull CommandSender sender, final @NotNull String[] args) {
-        if (!sender.hasPermission(Permissions.TABLES.toString()) || args.length < 3)
-            return ERROR;
+        if (!sender.hasPermission(Permissions.TABLES.toString())) {
+            sendMessage(sender, GeneralMessages.NO_PERM);
+            return !ERROR;
+        } 
+        if (args.length < 3) {
+            sender.sendMessage(TableMessages.NEW_TABLE_FAIL);
+            return !ERROR;
+        }
+            
         new ConfigFile(this.getClass(), VitBoxConfig.LOOT_TABLE_FOLDER, args[2], "lootTableExample");
+        sendMessage(sender, TableMessages.newTable(args[2]));
         return !ERROR;
     }
 
     private final boolean listLootTable(final @NotNull CommandSender sender) {
-        if (!sender.hasPermission(Permissions.TABLES.toString()))
+        if (!sender.hasPermission(Permissions.TABLES.toString())) {
+            sendMessage(sender, GeneralMessages.NO_PERM);
             return ERROR;
+        }
 
         sender.sendMessage(Messages.LIST_HEADER);
         for (LootTable table : Main.LOOT_TABLES)
@@ -132,20 +141,31 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
     }
 
     private final boolean testLootTable(final @NotNull CommandSender sender, final @NotNull String[] args) {
-        if (args.length < 3 || !(sender instanceof Player))
-            return ERROR;
+        if (!_isPlayer(sender)) {
+            sendMessage(sender, GeneralMessages.PLAYER_ONLY);
+            return !ERROR;
+        }
+        if (args.length < 3) {
+            sender.sendMessage(TableMessages.TEST_TABLE_FAIL);
+            return !ERROR;
+        }
         LootTable table = Main.getLootTable(args[2]);
-        if (table == null)
-            return ERROR;
+        if (table == null) {
+            sendMessage(sender, TableMessages.NO_TABLE);
+            return !ERROR;
+        }
         VitBoxListener.playerInteractedStatic((Player) sender, table, true);
         return !ERROR;
     }
 
     private final boolean infoLootTable(final @NotNull CommandSender sender, final @NotNull String[] args) {
-        if (args.length < 3)
-            return ERROR;
+        if (args.length < 3) {
+            sender.sendMessage(TableMessages.INFO_TABLE_FAIL);
+            return !ERROR;
+        }
+            
         LootTable table = Main.getLootTable(args[2]);
-        sender.sendMessage(Messages.upHeader("Table Info"));
+        sender.sendMessage(TableMessages.INFO_TABLE_HEADER);
         for (LootElement item : table.getLoots())
             sender.sendMessage(item.lootInfo());
         sender.sendMessage(Messages.DOWN_HEADER);
@@ -230,11 +250,17 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
     // =========================================================================
 
     private final boolean testItem(final @NotNull CommandSender sender) {
-        if (!_isPlayer(sender) || sender.hasPermission(Permissions.ITEMS.toString()))
-            return ERROR;
+        if (!_isPlayer(sender)) {
+            sendMessage(sender, GeneralMessages.PLAYER_ONLY);
+            return !ERROR;
+        }
+        if (!sender.hasPermission(Permissions.ITEMS.toString())) {
+            sendMessage(sender, GeneralMessages.NO_PERM);
+            return !ERROR;
+        }
         ItemStack stack = Bukkit.getPlayer(sender.getName()).getInventory().getItemInMainHand();
-        sender.sendMessage(Messages.upHeader("Item info"));
-        sender.sendMessage("    Material : " + stack.getType().name());
+        sender.sendMessage(ItemsMessages.ITEM_INFO_HEADER);
+        sender.sendMessage(ItemsMessages.materialInfo(stack.getType()));
         sender.sendMessage(Messages.DOWN_HEADER);
         return !ERROR;
     }

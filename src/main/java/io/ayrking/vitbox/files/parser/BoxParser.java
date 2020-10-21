@@ -10,7 +10,7 @@ import fr.plum.plumlib.chat.sender.IMessageSender;
 import io.ayrking.vitbox.Main;
 import io.ayrking.vitbox.arch.LootTable;
 import io.ayrking.vitbox.arch.box.LootBox;
-import io.ayrking.vitbox.plugin.Messages;
+import io.ayrking.vitbox.messages.BoxesMessages;
 import io.ayrking.vitbox.plugin.VitBoxConfig;
 
 /**
@@ -30,7 +30,7 @@ public class BoxParser extends FileParser implements IMessageSender {
     private final void loadData() {
         ConfigurationSection cs = this.getConfig().getConfigurationSection("chest");
         if (cs == null) {
-            sendMessage(Bukkit.getConsoleSender(), Messages.lootBoxParseFail(this.fileName));
+            sendMessage(Bukkit.getConsoleSender(), BoxesMessages.lootBoxParseFail(this.fileName));
             return;
         }
 
@@ -42,7 +42,7 @@ public class BoxParser extends FileParser implements IMessageSender {
         LootTable table = Main.getLootTable(this.getConfig().getString("chest.table"));
 
         if (table == null || world == null) {
-            sendMessage(Bukkit.getConsoleSender(), Messages.lootBoxParseFail(this.fileName));
+            sendMessage(Bukkit.getConsoleSender(), BoxesMessages.lootBoxParseFail(this.fileName));
             return;
         }
 

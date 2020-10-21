@@ -15,13 +15,16 @@ public abstract class GeneralMessages {
     // Colors
     // =========================================================================
     static final ChatColor DR = ChatColor.DARK_RED;
+    static final ChatColor R = ChatColor.RED;
 
-    
+
     // =========================================================================
     // Messages
     // =========================================================================
 
     public static final String PLAYER_ONLY = DR+"Seul les joueurs ont accès à cette commande.";
     public static final String NO_PERM = DR+"Vous n'avez pas la permission d'effectuer cette commande.";
+
+    public static final String VITBOX_CMD_ERROR = R+"Erreur de synthaxe : /vitbox [box/table] ... ";
 
 }
