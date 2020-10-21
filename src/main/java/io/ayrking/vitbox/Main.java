@@ -1,6 +1,7 @@
 package io.ayrking.vitbox;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
@@ -21,9 +22,9 @@ import io.ayrking.vitbox.plugin.VitBoxConfig;
  */
 public class Main extends PlumPlugin {
 
-    static FilesManager FILES = new FilesManager();
-    public static ArrayList<LootTable> LOOT_TABLES = new ArrayList<>();
-    public static BoxTable BOX = new BoxTable();
+    static final FilesManager FILES = new FilesManager();
+    public static final List<LootTable> LOOT_TABLES = new ArrayList<>();
+    public static final BoxTable BOX = new BoxTable();
 
     @Nullable
     public static final LootTable getLootTable(final @NotNull String name) {

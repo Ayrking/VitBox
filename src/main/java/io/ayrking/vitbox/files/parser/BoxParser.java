@@ -18,10 +18,12 @@ import io.ayrking.vitbox.plugin.VitBoxConfig;
  */
 public class BoxParser extends FileParser implements IMessageSender {
 
+    private final String name;
     private LootBox box;
 
     public BoxParser(@NotNull Class<?> c, @NotNull String outFile) {
         super(c, VitBoxConfig.CHEST_DATA_FOLDER, outFile, null);
+        this.name = outFile;
         loadData();
     }
 
@@ -44,7 +46,7 @@ public class BoxParser extends FileParser implements IMessageSender {
             return;
         }
 
-        this.box = new LootBox(new Location(Bukkit.getWorld(world), x, y, z), table);
+        this.box = new LootBox(this.name, new Location(Bukkit.getWorld(world), x, y, z), table);
         this.valid = true;
     }
 

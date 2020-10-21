@@ -11,10 +11,12 @@ import io.ayrking.vitbox.arch.LootTable;
  */
 public class LootBox {
     
+    final String name;
     final Location loc;
     final LootTable table;
 
-    public LootBox(@NotNull Location loc, @NotNull LootTable table) {
+    public LootBox(final @NotNull String name, final @NotNull Location loc, final @NotNull LootTable table) {
+        this.name = name;
         this.loc = loc;
         this.table = table;
     }

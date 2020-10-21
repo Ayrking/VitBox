@@ -38,7 +38,7 @@ public class SpatialHash {
      * Search a lotboox at precise coordonates
      * @return a {@link LootBox} instance or null if none was found
      */
-    public final LootBox searchAt(double x, double y, double z) {
+    public final LootBox searchAt(int x, int y, int z) {
         Pair<Integer> pos = new Pair<>(reduce(x),reduce(z));
 
         // Check if regions contain a lootbox
@@ -50,7 +50,7 @@ public class SpatialHash {
         // Search on box of the region
         for (LootBox box : data.get(pos.get(true)).get(pos.get(false))) {
             Location loc = box.getLoc();
-            if (loc.getX() == x && loc.getY() == y && loc.getZ() == z)
+            if (loc.getBlockX() == x && loc.getBlockY() == y && loc.getBlockZ() == z)
                 return box;
         }
         return null;

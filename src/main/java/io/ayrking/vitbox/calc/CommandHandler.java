@@ -1,6 +1,11 @@
 package io.ayrking.vitbox.calc;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,10 +17,16 @@ import fr.plum.plumlib.chat.sender.IMessageSender;
 import fr.plum.plumlib.io.yaml.ConfigFile;
 import io.ayrking.vitbox.Main;
 import io.ayrking.vitbox.arch.LootTable;
+import io.ayrking.vitbox.arch.box.LootBox;
 import io.ayrking.vitbox.arch.loots.LootElement;
+import io.ayrking.vitbox.files.PathUtils;
+import io.ayrking.vitbox.messages.BoxesMessages;
+import io.ayrking.vitbox.messages.GeneralMessages;
+import io.ayrking.vitbox.messages.TableMessages;
 import io.ayrking.vitbox.plugin.Messages;
 import io.ayrking.vitbox.plugin.Permissions;
 import io.ayrking.vitbox.plugin.VitBoxConfig;
+import net.md_5.bungee.api.ChatColor;
 
 /**
  * Command Manager for the Vitteria Lootbox plugin
@@ -32,7 +43,8 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
     // =========================================================================
 
     @Override
-    public boolean command(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String label, final @NotNull String[] args) {
+    public boolean command(final @NotNull CommandSender sender, final @NotNull Command command,
+            final @NotNull String label, final @NotNull String[] args) {
         switch (label) {
             case "vitbox":
                 return vitbox(sender, args);
@@ -42,17 +54,17 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
                 return ERROR;
         }
     }
-    
+
     /**
      * Conductor of vitbox command
      */
     private final boolean vitbox(final @NotNull CommandSender sender, final @NotNull String[] args) {
-        if (args.length>=1) {
+        if (args.length >= 1) {
             switch (args[0]) {
                 case "table":
                     return vitboxTable(sender, args);
                 case "box":
-                    break;
+                    return vitboxBoxes(sender, args);
                 default:
                     break;
             }
@@ -60,8 +72,9 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
         // TODO : error message
         return ERROR;
     }
+
     private final boolean vitboxTable(final @NotNull CommandSender sender, final @NotNull String[] args) {
-        if (args.length>=2) {
+        if (args.length >= 2) {
             switch (args[1]) {
                 case "new":
                     return newLootTable(sender, args);
@@ -76,7 +89,24 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
             }
         }
         sender.sendMessage(Messages.TABLE_CMD_FAIL);
-        return ERROR; 
+        return ERROR;
+    }
+
+    private final boolean vitboxBoxes(final @NotNull CommandSender sender, final @NotNull String[] args) {
+        if (args.length >= 2) {
+            switch (args[1]) {
+                case "new":
+                    return newBox(sender, args);
+                case "list":
+                    break;
+                case "remove":
+                    break;
+                default:
+                    break;
+            }
+        }
+        // TODO : error message
+        return ERROR;
     }
 
     // =========================================================================
@@ -102,7 +132,7 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
     }
 
     private final boolean testLootTable(final @NotNull CommandSender sender, final @NotNull String[] args) {
-        if (args.length<3 || !(sender instanceof Player))
+        if (args.length < 3 || !(sender instanceof Player))
             return ERROR;
         LootTable table = Main.getLootTable(args[2]);
         if (table == null)
@@ -110,21 +140,90 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
         VitBoxListener.playerInteractedStatic((Player) sender, table, true);
         return !ERROR;
     }
-    
+
     private final boolean infoLootTable(final @NotNull CommandSender sender, final @NotNull String[] args) {
-        if (args.length<3)
+        if (args.length < 3)
             return ERROR;
         LootTable table = Main.getLootTable(args[2]);
         sender.sendMessage(Messages.upHeader("Table Info"));
         for (LootElement item : table.getLoots())
             sender.sendMessage(item.lootInfo());
         sender.sendMessage(Messages.DOWN_HEADER);
-        return !ERROR; 
+        return !ERROR;
     }
 
     // =========================================================================
-    // Box
+    // Boxes
     // =========================================================================
+    private final boolean newBox(final @NotNull CommandSender sender, final @NotNull String[] args) {
+        // Player only
+        if (!_isPlayer(sender)) {
+            sender.sendMessage(ChatColor.DARK_RED + GeneralMessages.PLAYER_ONLY);
+            return !ERROR;
+        }
+        // Has Perm
+        if (!sender.hasPermission(Permissions.BOXES.toString())) {
+            sender.sendMessage(ChatColor.DARK_RED+GeneralMessages.NO_PERM);
+            return !ERROR;
+        }
+        // Need at least 3 args
+        if (args.length < 3) {
+            sender.sendMessage(ChatColor.DARK_RED + BoxesMessages.NEW_BOX_FAIL);
+            return !ERROR;
+        }
+
+        // Get the pos of the new box & test if it already exist
+        Player player = (Player) sender;
+        Location loc = player.getTargetBlock(null, 5).getLocation();
+        if (Main.BOX.searchAt(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()) != null) {
+            sendMessage(sender, ChatColor.DARK_RED + BoxesMessages.BOX_ALREADY_EXIST);
+            return !ERROR;
+        }
+
+        // Choose the name of the box
+        String name;
+        String loottable;
+        if (args.length == 4) {
+            if (PathUtils.chestNameExist(args[2])) {
+                sendMessage(sender, ChatColor.DARK_RED + BoxesMessages.NAME_ALREADY_USED);
+                return !ERROR;
+            }
+            if (Main.getLootTable(args[3]) == null) {
+                sendMessage(sender, ChatColor.DARK_RED + TableMessages.NO_TABLE);
+                return !ERROR;
+            }
+            name = args[2];
+            loottable = args[3];
+        } else {
+            if (Main.getLootTable(args[2]) == null) {
+                sendMessage(sender, ChatColor.DARK_RED + TableMessages.NO_TABLE);
+                return !ERROR;
+            }
+            name = PathUtils.getFormattedChestName(loc);
+            loottable = args[2];
+        }
+
+        // Create the box
+        ConfigFile cf = new ConfigFile(this.getClass(), VitBoxConfig.CHEST_DATA_FOLDER, name, null);
+        cf.getConfig().set("chest.world", loc.getWorld().getName());
+        cf.getConfig().set("chest.x", loc.getBlockX());
+        cf.getConfig().set("chest.y", loc.getBlockY());
+        cf.getConfig().set("chest.z", loc.getBlockZ());
+        cf.getConfig().set("chest.table", loottable);
+
+        try {
+            cf.getConfig().save(VitBoxConfig.CHEST_DATA_FOLDER +"/"+ name + ".yml");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ERROR;
+        }
+        // Load the box
+        LootBox box = new LootBox(name, loc, Main.getLootTable(loottable));
+        Main.BOX.addLootBox(box);
+
+        sendMessage(sender, BoxesMessages.boxCreated(name, loottable));
+        return !ERROR;
+    }
 
     // =========================================================================
     // Test Item
@@ -134,7 +233,7 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
         if (!_isPlayer(sender) || sender.hasPermission(Permissions.ITEMS.toString()))
             return ERROR;
         ItemStack stack = Bukkit.getPlayer(sender.getName()).getInventory().getItemInMainHand();
-        sender.sendMessage(Messages.DOWN_HEADER);
+        sender.sendMessage(Messages.upHeader("Item info"));
         sender.sendMessage("    Material : " + stack.getType().name());
         sender.sendMessage(Messages.DOWN_HEADER);
         return !ERROR;

@@ -26,7 +26,7 @@ public final class BoxTable {
      * Search a lotboox at precise coordonates in a given world
      * @return a {@link LootBox} instance or null if none was found
      */
-    public final LootBox searchAt(String wname, double x, double y, double z) {
+    public final LootBox searchAt(String wname, int x, int y, int z) {
         if (wname == null || !data.containsKey(wname))
             return null;   
         return data.get(wname).searchAt(x, y, z);
