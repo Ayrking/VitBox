@@ -9,9 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import fr.plum.plumlib.arch.ICmdHandler;
+import fr.plum.plumlib.arch.CmdHandler;
 import fr.plum.plumlib.chat.config.ChatConfig;
-import fr.plum.plumlib.chat.sender.IMessageSender;
 import fr.plum.plumlib.io.yaml.ConfigFile;
 import io.ayrking.vitbox.Main;
 import io.ayrking.vitbox.arch.LootTable;
@@ -33,7 +32,7 @@ import net.md_5.bungee.api.ChatColor;
  * @author Meltwin
  * @since 1.0.0
  */
-public final class CommandHandler extends ICmdHandler implements IMessageSender {
+public final class CommandHandler extends CmdHandler {
 
     static final boolean ERROR = false;
 
@@ -58,7 +57,7 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
      * Conductor of vitbox command
      */
     private final boolean vitbox(final @NotNull CommandSender sender, final @NotNull String[] args) {
-        if (args.length >= 1) {
+        if (this.hasArgsNumberMin(args, 1)) {
             switch (args[0]) {
                 case "table":
                     return vitboxTable(sender, args);
@@ -73,7 +72,7 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
     }
 
     private final boolean vitboxTable(final @NotNull CommandSender sender, final @NotNull String[] args) {
-        if (args.length >= 2) {
+        if (this.hasArgsNumberMin(args, 2)) {
             switch (args[1]) {
                 case "new":
                     return newLootTable(sender, args);
@@ -92,7 +91,7 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
     }
 
     private final boolean vitboxBoxes(final @NotNull CommandSender sender, final @NotNull String[] args) {
-        if (args.length >= 2) {
+        if (this.hasArgsNumberMin(args, 2)) {
             switch (args[1]) {
                 case "new":
                     return newBox(sender, args);
@@ -113,14 +112,8 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
     // =========================================================================
 
     private final boolean newLootTable(final @NotNull CommandSender sender, final @NotNull String[] args) {
-        if (!sender.hasPermission(Permissions.TABLES.toString())) {
-            sendMessage(sender, GeneralMessages.NO_PERM);
+        if (!hasPerm(sender, Permissions.TABLES , GeneralMessages.NO_PERM) ||  !hasArgsNumberMin(args, 3, sender, TableMessages.NEW_TABLE_FAIL))
             return !ERROR;
-        } 
-        if (args.length < 3) {
-            sender.sendMessage(TableMessages.NEW_TABLE_FAIL);
-            return !ERROR;
-        }
             
         new ConfigFile(this.getClass(), VitBoxConfig.LOOT_TABLE_FOLDER, args[2], "lootTableExample");
         sendMessage(sender, TableMessages.newTable(args[2]));
@@ -128,11 +121,9 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
     }
 
     private final boolean listLootTable(final @NotNull CommandSender sender) {
-        if (!sender.hasPermission(Permissions.TABLES.toString())) {
-            sendMessage(sender, GeneralMessages.NO_PERM);
+        if (!hasPerm(sender, Permissions.TABLES, GeneralMessages.NO_PERM)) 
             return ERROR;
-        }
-
+        
         sender.sendMessage(Messages.LIST_HEADER);
         for (LootTable table : Main.LOOT_TABLES)
             sender.sendMessage(Messages.listElement(table.getName()));
@@ -141,19 +132,12 @@ public final class CommandHandler extends ICmdHandler implements IMessageSender 
     }
 
     private final boolean testLootTable(final @NotNull CommandSender sender, final @NotNull String[] args) {
-        if (!_isPlayer(sender)) {
-            sendMessage(sender, GeneralMessages.PLAYER_ONLY);
+        if (!this.senderIsPlayer(sender, GeneralMessages.PLAYER_ONLY) || !hasArgsNumberMin(args, 3, sender, TableMessages.TEST_TABLE_FAIL))
             return !ERROR;
-        }
-        if (args.length < 3) {
-            sender.sendMessage(TableMessages.TEST_TABLE_FAIL);
-            return !ERROR;
-        }
+
         LootTable table = Main.getLootTable(args[2]);
-        if (table == null) {
-            sendMessage(sender, TableMessages.NO_TABLE);
+        if (isNull(table, sender, TableMessages.NO_TABLE))
             return !ERROR;
-        }
         VitBoxListener.playerInteractedStatic((Player) sender, table, true);
         return !ERROR;
     }

@@ -2,7 +2,9 @@ package io.ayrking.vitbox.plugin;
 
 import org.jetbrains.annotations.NotNull;
 
-public enum Permissions {
+import fr.plum.plumlib.arch.IPermission;
+
+public enum Permissions implements IPermission {
     TABLES("vitbox.table"),
     BOXES("vitbox.box"),
     ITEMS("vitbox.testitem");
@@ -11,9 +13,11 @@ public enum Permissions {
     private Permissions(final @NotNull String perm) {
         this.perm = perm;
     }
-
+    
     @Override
-    public final String toString() {return this.perm;}
+    public String path() {
+        return this.perm;
+    }
 
 
 }
